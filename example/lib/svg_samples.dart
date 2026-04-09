@@ -484,12 +484,12 @@ const svgSamples = [
   SvgSample(
     label: 'Data URI (PNG)',
     category: 'Images',
-    notes: 'Base64-encoded PNG — supported by both renderers.',
+    notes: 'Base64-encoded 32x32 gradient PNG — supported by both renderers.',
     svg: '''
 <svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
   <rect width="200" height="150" fill="#f8f8f8" rx="8" />
   <image x="50" y="10" width="100" height="100"
-    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA60lEQVR42u3WMQ6DMBAE0P3/o1OkSJEiRYqgNRI2WGPP7soUO9JIFPb8YjGYiIiIiIiIiGjLcV2+6/qGruN1nffr0PUcrmu/DH3H4br2zd/J99V3nL0Yuo7DdR2Lv5PV92q/NnQdr+tY/Z2svlf7tTl0Ha/rWP2drL5X+7U5dB2v61j9nay+V/u1OXQdr+tY/Z2svlf7tTl0Ha/rWP2drL5X+7U5dB2v61j9nay+V/u1OXQdr+tY/Z2svlf7tTl0Ha/rWP2drL5X+7U5dB2v61j9nay+V/u1OXQdr+tY/Z2IiIiIiIiIiP6/H8Y5Tk/lrHJ6AAAAAElFTkSuQmCC" />
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAsUlEQVR4nO3OMQsBARiA4RuNRqPVaDRaTWJQDIpBUQbKQBHq0umSOiIkIsmlS4RCCmUxWo1Go/X1Myzf8wsehZKfbznIpxrirUZ41aI8tTgPPcGtkeLYTLM2MpjtHJNOnn6viDGoUB+qVMcahYlOdtYkOW8RW3QJLwcErBG+1RTvZo5na+LeW7gOa5ynHY7zAfvljO12RbnfUSQgAQlIQAISkIAEJCABCUhAAhKQwL8DPxP1svclxABXAAAAAElFTkSuQmCC" />
   <text x="100" y="135" text-anchor="middle" font-size="12" fill="#333">data:image/png</text>
 </svg>''',
   ),
@@ -497,12 +497,12 @@ const svgSamples = [
   SvgSample(
     label: 'Data URI (JPEG)',
     category: 'Images',
-    notes: 'Base64-encoded JPEG — supported by both renderers.',
+    notes: 'Base64-encoded 32x32 gradient JPEG — supported by both renderers.',
     svg: '''
 <svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
   <rect width="200" height="150" fill="#f8f8f8" rx="8" />
   <image x="50" y="10" width="100" height="100"
-    href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAeAB4DASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAUEBgf/xAAoEAABAwMDBAEFAAAAAAAAAAABAgMRAAQhBRIxBhNBUXEiMmGBkf/EABYBAQEBAAAAAAAAAAAAAAAAAAECA//EABkRAQEBAQEBAAAAAAAAAAAAAAEAAhEhMf/aAAwDAQACEQMRAD8A9coqDr2unSLTahN0EthzG1MFSjAkADiSTAz5oCt1ee2lqu6vXg0wgSpStEAVV6b6mi/KLO/CWroiArGxxXo+D7+asJCkhSSCkiQRkEe65/WOkEXC3LnTwhq5JlTCsCfaf4f9HugorVFKE6hqzTbqgq6umwogiJWYzFVeh9VItlN2GpOBLKjCHlfan0T/AH+0V1FZL+xtdQtlW15bt3DSuUrSCD/DQf/Z" />
+    href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCrS0lLXrVh4YKdTadXlVj38OMpaSlr1ax4GGCnU2nV5VY9/Dn/2Q==" />
   <text x="100" y="135" text-anchor="middle" font-size="12" fill="#333">data:image/jpeg</text>
 </svg>''',
   ),
