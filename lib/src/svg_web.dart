@@ -23,13 +23,11 @@ Widget svgString(
       ..display = 'flex'
       ..alignItems = 'center'
       ..justifyContent = 'center';
-    // Ensure the <svg> element fills its container.
+    // Ensure the <svg> element scales to fill its container.
     final svgEl = container.querySelector('svg');
     if (svgEl != null) {
-      svgEl as web.HTMLElement;
-      svgEl.style
-        ..width = '100%'
-        ..height = '100%';
+      svgEl.setAttribute('width', '100%');
+      svgEl.setAttribute('height', '100%');
     }
     return container;
   });
