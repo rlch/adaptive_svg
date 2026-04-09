@@ -1,5 +1,10 @@
 # adaptive_svg
 
+[![pub package](https://img.shields.io/pub/v/adaptive_svg.svg)](https://pub.dev/packages/adaptive_svg)
+[![pub points](https://img.shields.io/pub/points/adaptive_svg)](https://pub.dev/packages/adaptive_svg/score)
+[![CI](https://github.com/rlch/adaptive_svg/actions/workflows/publish.yml/badge.svg)](https://github.com/rlch/adaptive_svg/actions/workflows/publish.yml)
+[![license](https://img.shields.io/github/license/rlch/adaptive_svg)](https://github.com/rlch/adaptive_svg/blob/main/LICENSE)
+
 Platform-adaptive SVG rendering for Flutter. Uses the browser's native `<svg>` element on web, and [flutter_svg](https://pub.dev/packages/flutter_svg) on all other platforms.
 
 ## Why?
@@ -25,7 +30,7 @@ Platform-adaptive SVG rendering for Flutter. Uses the browser's native `<svg>` e
 
 ```yaml
 dependencies:
-  adaptive_svg: ^0.1.0
+  adaptive_svg: ^0.2.0
 ```
 
 ## Usage
@@ -41,6 +46,16 @@ AdaptiveSvg.asset('assets/icon.svg', width: 24, height: 24)
 ```
 
 On web, both render inline `<svg>` elements in the DOM. On iOS, Android, macOS, Windows, and Linux, they delegate to `SvgPicture.string` / `SvgPicture.asset` from `flutter_svg`.
+
+### Web-only options
+
+```dart
+// Disable pointer events (useful for static thumbnails in a GestureDetector)
+AdaptiveSvg(svgMarkup, interactive: false)
+
+// Enable CORS for external <image> elements
+AdaptiveSvg(svgMarkup, imageCrossOrigin: CrossOrigin.anonymous)
+```
 
 ## Example
 
