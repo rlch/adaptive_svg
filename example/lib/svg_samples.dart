@@ -482,7 +482,47 @@ const svgSamples = [
   // ── Images ────────────────────────────────────────────────────────────
 
   SvgSample(
-    label: 'External image (PNG)',
+    label: 'Data URI (PNG)',
+    category: 'Images',
+    notes: 'Base64-encoded PNG — supported by both renderers.',
+    svg: '''
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="150" fill="#f8f8f8" rx="8" />
+  <image x="50" y="10" width="100" height="100"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA60lEQVR42u3WMQ6DMBAE0P3/o1OkSJEiRYqgNRI2WGPP7soUO9JIFPb8YjGYiIiIiIiIiGjLcV2+6/qGruN1nffr0PUcrmu/DH3H4br2zd/J99V3nL0Yuo7DdR2Lv5PV92q/NnQdr+tY/Z2svlf7tTl0Ha/rWP2drL5X+7U5dB2v61j9nay+V/u1OXQdr+tY/Z2svlf7tTl0Ha/rWP2drL5X+7U5dB2v61j9nay+V/u1OXQdr+tY/Z2svlf7tTl0Ha/rWP2drL5X+7U5dB2v61j9nay+V/u1OXQdr+tY/Z2IiIiIiIiIiP6/H8Y5Tk/lrHJ6AAAAAElFTkSuQmCC" />
+  <text x="100" y="135" text-anchor="middle" font-size="12" fill="#333">data:image/png</text>
+</svg>''',
+  ),
+
+  SvgSample(
+    label: 'Data URI (JPEG)',
+    category: 'Images',
+    notes: 'Base64-encoded JPEG — supported by both renderers.',
+    svg: '''
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="150" fill="#f8f8f8" rx="8" />
+  <image x="50" y="10" width="100" height="100"
+    href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAeAB4DASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAUEBgf/xAAoEAABAwMDBAEFAAAAAAAAAAABAgMRAAQhBRIxBhNBUXEiMmGBkf/EABYBAQEBAAAAAAAAAAAAAAAAAAECA//EABkRAQEBAQEBAAAAAAAAAAAAAAEAAhEhMf/aAAwDAQACEQMRAD8A9coqDr2unSLTahN0EthzG1MFSjAkADiSTAz5oCt1ee2lqu6vXg0wgSpStEAVV6b6mi/KLO/CWroiArGxxXo+D7+asJCkhSSCkiQRkEe65/WOkEXC3LnTwhq5JlTCsCfaf4f9HugorVFKE6hqzTbqgq6umwogiJWYzFVeh9VItlN2GpOBLKjCHlfan0T/AH+0V1FZL+xtdQtlW15bt3DSuUrSCD/DQf/Z" />
+  <text x="100" y="135" text-anchor="middle" font-size="12" fill="#333">data:image/jpeg</text>
+</svg>''',
+  ),
+
+  SvgSample(
+    label: 'Data URI (SVG in SVG)',
+    category: 'Images',
+    flutterSvgSupported: false,
+    notes: 'SVG embedded as a data URI inside another SVG — inception.',
+    svg: '''
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="150" fill="#2d2d2d" rx="8" />
+  <image x="25" y="10" width="150" height="110"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iMTEwIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjExMCIgZmlsbD0iI2ZmZiIgcng9IjgiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjU1IiByPSIyNSIgZmlsbD0iI2ZmNjM0NyIvPjxyZWN0IHg9Ijc1IiB5PSIzMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiByeD0iOCIgZmlsbD0iIzQyOTlFMSIvPjx0ZXh0IHg9Ijc1IiB5PSIxMDAiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk5lc3RlZCBTVkc8L3RleHQ+PC9zdmc+" />
+  <text x="100" y="140" text-anchor="middle" font-size="11" fill="#aaa">data:image/svg+xml</text>
+</svg>''',
+  ),
+
+  SvgSample(
+    label: 'External URL (href)',
     category: 'Images',
     flutterSvgSupported: false,
     notes: 'flutter_svg only supports data URI images, not external URLs.',
@@ -491,7 +531,21 @@ const svgSamples = [
   <rect width="220" height="200" fill="#1a1a2e" rx="8" />
   <image x="10" y="10" width="200" height="140"
     href="https://www.w3schools.com/css/img_5terre.jpg" />
-  <text x="110" y="180" text-anchor="middle" font-size="13" fill="#eee">External URL image</text>
+  <text x="110" y="180" text-anchor="middle" font-size="13" fill="#eee">External URL (href)</text>
+</svg>''',
+  ),
+
+  SvgSample(
+    label: 'External URL (xlink:href)',
+    category: 'Images',
+    flutterSvgSupported: false,
+    notes: 'Legacy xlink:href attribute — deprecated but still widely used.',
+    svg: '''
+<svg width="220" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <rect width="220" height="200" fill="#1a2e1a" rx="8" />
+  <image x="10" y="10" width="200" height="140"
+    xlink:href="https://www.w3schools.com/html/pic_trulli.jpg" />
+  <text x="110" y="180" text-anchor="middle" font-size="13" fill="#eee">xlink:href (legacy)</text>
 </svg>''',
   ),
 
