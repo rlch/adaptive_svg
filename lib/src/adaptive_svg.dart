@@ -3,7 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'cross_origin.dart';
-import 'svg_web_stub.dart' if (dart.library.js_interop) 'svg_web.dart'
+import 'svg_web_stub.dart'
+    if (dart.library.js_interop) 'svg_web.dart'
     as platform;
 
 export 'cross_origin.dart';
@@ -14,13 +15,20 @@ export 'cross_origin.dart';
 /// ## Web-only options
 ///
 /// On web, the SVG is injected into an `HtmlElementView` via a DOM
-/// `<div>`. Two optional parameters tune how the resulting element
+/// `<div>`. Three optional parameters tune how the resulting element
 /// interacts with the host page:
 ///
 /// - [interactive] (default `true`): when `false`, applies
 ///   `pointer-events: none` to the container so taps / hovers flow
 ///   through to the Flutter widget layer underneath. Useful for static
 ///   thumbnails that sit inside a `GestureDetector`.
+///
+/// - [interceptPointer] (default `false`): when `true`, overlays a
+///   transparent [PointerInterceptor] on top of the `HtmlElementView`
+///   so that pointer events are forwarded to Flutter's gesture system
+///   instead of being swallowed by the platform view's DOM hole. Use
+///   this when `interactive: false` alone isn't enough — e.g. when the
+///   SVG sits inside a `GestureDetector` and taps must reach it.
 ///
 /// - [imageCrossOrigin]: when set, applies the `crossorigin` attribute
 ///   to every `<image>` child before inserting the SVG. Forces the
@@ -29,7 +37,7 @@ export 'cross_origin.dart';
 ///   only sends `Access-Control-Allow-Origin` (and not
 ///   `Cross-Origin-Resource-Policy`).
 ///
-/// On native both parameters are silently ignored — `flutter_svg`
+/// On native all web-only parameters are silently ignored — `flutter_svg`
 /// renders through Flutter's canvas with no pointer interception and
 /// does not load external `<image>` resources.
 class AdaptiveSvg extends StatelessWidget {
@@ -46,6 +54,12 @@ class AdaptiveSvg extends StatelessWidget {
   /// Web only. On native, `flutter_svg` is always non-interactive.
   final bool interactive;
 
+  /// Whether to overlay a [PointerInterceptor] so that pointer events
+  /// reach Flutter's gesture system instead of the platform view's DOM hole.
+  ///
+  /// Web only. On native, ignored.
+  final bool interceptPointer;
+
   /// `crossorigin` attribute applied to every `<image>` child of the
   /// parsed SVG on web.
   ///
@@ -59,6 +73,7 @@ class AdaptiveSvg extends StatelessWidget {
     this.fit = BoxFit.contain,
     this.colorFilter,
     this.interactive = true,
+    this.interceptPointer = true,
     this.imageCrossOrigin,
     super.key,
   });
@@ -76,6 +91,7 @@ class AdaptiveSvg extends StatelessWidget {
     AssetBundle? bundle,
     String? package,
     bool interactive = true,
+    bool interceptPointer = false,
     CrossOrigin? imageCrossOrigin,
     Key? key,
   }) {
@@ -87,6 +103,7 @@ class AdaptiveSvg extends StatelessWidget {
         bundle: bundle,
         package: package,
         interactive: interactive,
+        interceptPointer: interceptPointer,
         imageCrossOrigin: imageCrossOrigin,
         key: key,
       );
@@ -111,6 +128,7 @@ class AdaptiveSvg extends StatelessWidget {
         width: width,
         height: height,
         interactive: interactive,
+        interceptPointer: interceptPointer,
         imageCrossOrigin: imageCrossOrigin,
         key: key,
       );

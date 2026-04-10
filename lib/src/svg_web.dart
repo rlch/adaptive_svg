@@ -3,6 +3,7 @@ import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:web/web.dart' as web;
 
 import 'cross_origin.dart';
@@ -29,6 +30,7 @@ Widget svgString(
   double? height,
   Key? key,
   bool interactive = true,
+  bool interceptPointer = false,
   CrossOrigin? imageCrossOrigin,
 }) {
   final viewType =
@@ -81,10 +83,27 @@ Widget svgString(
     });
   }
 
-  return SizedBox(
+  final view = SizedBox(
     width: width,
     height: height,
     child: HtmlElementView(viewType: viewType, key: key),
+  );
+
+  if (!interceptPointer) return view;
+
+  // On Flutter web, `HtmlElementView` creates a platform view that sits
+  // above Flutter's canvas in the DOM. Even with `pointer-events: none`
+  // CSS, the platform view "hole" in Flutter's glass pane prevents
+  // `GestureDetector` parents from receiving taps. `PointerInterceptor`
+  // places a transparent Flutter-controlled HTML overlay above the
+  // platform view that forwards pointer events back to Flutter.
+  return Stack(
+    children: [
+      view,
+      Positioned.fill(
+        child: PointerInterceptor(child: const SizedBox.expand()),
+      ),
+    ],
   );
 }
 
@@ -96,6 +115,7 @@ Widget svgAsset(
   String? package,
   Key? key,
   bool interactive = true,
+  bool interceptPointer = false,
   CrossOrigin? imageCrossOrigin,
 }) {
   final effectiveBundle = bundle ?? rootBundle;
@@ -115,6 +135,7 @@ Widget svgAsset(
           height: height,
           key: key,
           interactive: interactive,
+          interceptPointer: interceptPointer,
           imageCrossOrigin: imageCrossOrigin,
         );
       },
