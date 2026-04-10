@@ -30,7 +30,7 @@ Platform-adaptive SVG rendering for Flutter. Uses the browser's native `<svg>` e
 
 ```yaml
 dependencies:
-  adaptive_svg: ^0.2.0
+  adaptive_svg: ^0.3.0
 ```
 
 ## Usage
@@ -55,6 +55,11 @@ AdaptiveSvg(svgMarkup, interactive: false)
 
 // Enable CORS for external <image> elements
 AdaptiveSvg(svgMarkup, imageCrossOrigin: CrossOrigin.anonymous)
+
+// Disable pointer interception (enabled by default — forwards pointer events
+// from the platform view back to Flutter's gesture system so parent
+// GestureDetector/InkWell widgets receive taps)
+AdaptiveSvg(svgMarkup, interceptPointer: false)
 ```
 
 ## Example

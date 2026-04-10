@@ -1,3 +1,23 @@
+## 0.3.0
+
+### New: `interceptPointer` option
+
+- `interceptPointer` (default `true`) — when `true`, overlays a transparent
+  `PointerInterceptor` on top of the `HtmlElementView`. On Flutter web,
+  platform views sit above Flutter's canvas in the DOM and swallow pointer
+  events even with `pointer-events: none` CSS — the platform view "hole" in
+  Flutter's glass pane prevents parent `GestureDetector` widgets from
+  receiving taps. `interceptPointer` places a Flutter-controlled HTML overlay
+  above the platform view so events route back through Flutter's gesture
+  system.
+
+  Use this when the SVG is a non-interactive thumbnail inside a clickable
+  parent (e.g. `GestureDetector`, `InkWell`). Web-only; ignored on native.
+
+### Dependency
+
+- Added `pointer_interceptor: ^0.10.1` as a dependency.
+
 ## 0.2.0
 
 ### Web rendering fixes
