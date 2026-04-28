@@ -79,6 +79,39 @@ class _ClickThroughTestPageState extends State<ClickThroughTestPage> {
             onTap: () => _registerTap('baseline'),
             child: SvgPicture.string(_sampleSvg, width: 200, height: 120),
           ),
+          _TestRow(
+            title: 'borderRadius: BorderRadius.circular(24)',
+            expectation:
+                'The SVG corners are clipped via CSS border-radius on web '
+                '(or ClipRRect on native).',
+            count: _taps['radius'] ?? 0,
+            onTap: () => _registerTap('radius'),
+            child: AdaptiveSvg(
+              _sampleSvg,
+              width: 200,
+              height: 120,
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+          _TestRow(
+            title: 'borderRadius + gestures: true + onTap',
+            expectation:
+                'Rounded SVG with a working onTap. Tapping the SVG region '
+                'fires the inner onTap.',
+            count: _taps['radius-tap'] ?? 0,
+            onTap: () => _registerTap('radius-tap'),
+            child: AdaptiveSvg(
+              _sampleSvg,
+              width: 200,
+              height: 120,
+              gestures: true,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(32),
+                bottomRight: Radius.circular(32),
+              ),
+              onTap: () => _registerTap('radius-tap'),
+            ),
+          ),
           const SizedBox(height: 24),
           Center(
             child: FilledButton(

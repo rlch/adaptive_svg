@@ -25,3 +25,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 /build/
 /coverage/
+
+# Playwright/manual screenshot artifacts (not source)
+/.playwright-mcp/
+/*.png
