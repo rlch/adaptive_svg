@@ -102,6 +102,14 @@ class AdaptiveSvg extends StatelessWidget {
   /// Web only. On native, ignored.
   final CrossOrigin? imageCrossOrigin;
 
+  /// Rounded-corner clip applied to the rendered SVG.
+  ///
+  /// On web this is applied as CSS `border-radius` + `overflow: hidden` on
+  /// the wrapper `<div>` that hosts the platform view, because Flutter's
+  /// `ClipRRect` does not reliably clip `HtmlElementView` content. On native
+  /// it falls back to wrapping the rendered SVG in a `ClipRRect`.
+  final BorderRadius? borderRadius;
+
   const AdaptiveSvg(
     this.svgString, {
     this.width,
@@ -117,6 +125,7 @@ class AdaptiveSvg extends StatelessWidget {
     this.mouseCursor,
     this.interactive = true,
     this.imageCrossOrigin,
+    this.borderRadius,
     super.key,
   });
 
@@ -141,6 +150,7 @@ class AdaptiveSvg extends StatelessWidget {
     MouseCursor? mouseCursor,
     bool interactive = true,
     CrossOrigin? imageCrossOrigin,
+    BorderRadius? borderRadius,
     Key? key,
   }) {
     Widget child;
@@ -153,6 +163,7 @@ class AdaptiveSvg extends StatelessWidget {
         package: package,
         interactive: interactive,
         imageCrossOrigin: imageCrossOrigin,
+        borderRadius: borderRadius,
       );
     } else {
       child = SvgPicture.asset(
@@ -164,6 +175,9 @@ class AdaptiveSvg extends StatelessWidget {
         bundle: bundle,
         package: package,
       );
+      if (borderRadius != null) {
+        child = ClipRRect(borderRadius: borderRadius, child: child);
+      }
     }
 
     if (!gestures) return KeyedSubtree(key: key, child: child);
@@ -192,6 +206,7 @@ class AdaptiveSvg extends StatelessWidget {
         height: height,
         interactive: interactive,
         imageCrossOrigin: imageCrossOrigin,
+        borderRadius: borderRadius,
       );
     } else {
       child = SvgPicture.string(
@@ -201,6 +216,9 @@ class AdaptiveSvg extends StatelessWidget {
         fit: fit,
         colorFilter: colorFilter,
       );
+      if (borderRadius != null) {
+        child = ClipRRect(borderRadius: borderRadius!, child: child);
+      }
     }
 
     if (!gestures) return child;

@@ -1,3 +1,16 @@
+## 0.5.0
+
+### New: `borderRadius` parameter
+
+- `borderRadius` — rounds the corners of the rendered SVG.
+- On web, applied as CSS `border-radius` + `overflow: hidden` on the
+  wrapper `<div>` that hosts the platform view. Flutter's `ClipRRect`
+  doesn't reliably clip `HtmlElementView` content, so the rounding is
+  baked into the DOM container directly.
+- On native, falls back to wrapping the rendered widget in a
+  `ClipRRect`.
+- Available on both `AdaptiveSvg(...)` and `AdaptiveSvg.asset(...)`.
+
 ## 0.4.0
 
 ### New: built-in gesture handling

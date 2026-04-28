@@ -67,6 +67,107 @@ void main() {
     });
   });
 
+  group('borderRadius (native)', () {
+    testWidgets('does not wrap in ClipRRect when borderRadius is null', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrap(const AdaptiveSvg(_sampleSvg, width: 48, height: 48)),
+      );
+
+      expect(
+        find.descendant(
+          of: find.byType(AdaptiveSvg),
+          matching: find.byType(ClipRRect),
+        ),
+        findsNothing,
+      );
+    });
+
+    testWidgets('wraps in ClipRRect with the given radius', (tester) async {
+      const radius = BorderRadius.all(Radius.circular(16));
+      await tester.pumpWidget(
+        _wrap(
+          const AdaptiveSvg(
+            _sampleSvg,
+            width: 48,
+            height: 48,
+            borderRadius: radius,
+          ),
+        ),
+      );
+
+      final clip = tester.widget<ClipRRect>(
+        find
+            .descendant(
+              of: find.byType(AdaptiveSvg),
+              matching: find.byType(ClipRRect),
+            )
+            .first,
+      );
+      expect(clip.borderRadius, radius);
+    });
+
+    testWidgets('AdaptiveSvg.asset wraps in ClipRRect with the given radius', (
+      tester,
+    ) async {
+      const radius = BorderRadius.all(Radius.circular(8));
+      await tester.pumpWidget(
+        _wrap(
+          AdaptiveSvg.asset(
+            'assets/test.svg',
+            width: 24,
+            height: 24,
+            borderRadius: radius,
+          ),
+        ),
+      );
+
+      final clip = tester.widget<ClipRRect>(
+        find
+            .descendant(
+              of: find.byType(KeyedSubtree),
+              matching: find.byType(ClipRRect),
+            )
+            .first,
+      );
+      expect(clip.borderRadius, radius);
+    });
+
+    testWidgets('borderRadius composes with gestures: true', (tester) async {
+      const radius = BorderRadius.all(Radius.circular(12));
+      await tester.pumpWidget(
+        _wrap(
+          AdaptiveSvg(
+            _sampleSvg,
+            width: 48,
+            height: 48,
+            gestures: true,
+            onTap: () {},
+            borderRadius: radius,
+          ),
+        ),
+      );
+
+      // ClipRRect still wraps the rendered SVG, and the gesture overlay is
+      // present on top.
+      expect(
+        find.descendant(
+          of: find.byType(AdaptiveSvg),
+          matching: find.byType(ClipRRect),
+        ),
+        findsWidgets,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(AdaptiveSvg),
+          matching: find.byType(GestureDetector),
+        ),
+        findsWidgets,
+      );
+    });
+  });
+
   group('gestures: true', () {
     testWidgets('fires onTap when the SVG region is tapped', (tester) async {
       var taps = 0;

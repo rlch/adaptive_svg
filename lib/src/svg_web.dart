@@ -29,9 +29,12 @@ Widget svgString(
   double? height,
   bool interactive = true,
   CrossOrigin? imageCrossOrigin,
+  BorderRadius? borderRadius,
 }) {
+  // Include `borderRadius` in the view-type key so each radius gets its own
+  // factory — radii are baked into the container's CSS at registration time.
   final viewType =
-      'adaptive-svg-${Object.hash(svg, interactive, imageCrossOrigin)}';
+      'adaptive-svg-${Object.hash(svg, interactive, imageCrossOrigin, borderRadius)}';
 
   if (!_registered.contains(viewType)) {
     _registered.add(viewType);
@@ -43,6 +46,19 @@ Widget svgString(
         ..display = 'flex'
         ..alignItems = 'center'
         ..justifyContent = 'center';
+      if (borderRadius != null) {
+        // Clip the platform view at the DOM layer. Flutter's `ClipRRect`
+        // doesn't reliably clip `HtmlElementView` content (the platform view
+        // sits in a DOM hole above Flutter's canvas), so we apply the
+        // rounding via CSS `border-radius` + `overflow: hidden` directly on
+        // the wrapper `<div>` that hosts the SVG.
+        container.style
+          ..borderTopLeftRadius = '${borderRadius.topLeft.x}px'
+          ..borderTopRightRadius = '${borderRadius.topRight.x}px'
+          ..borderBottomLeftRadius = '${borderRadius.bottomLeft.x}px'
+          ..borderBottomRightRadius = '${borderRadius.bottomRight.x}px'
+          ..overflow = 'hidden';
+      }
       if (!interactive) {
         container.style.pointerEvents = 'none';
       }
@@ -95,10 +111,12 @@ Widget svgAsset(
   String? package,
   bool interactive = true,
   CrossOrigin? imageCrossOrigin,
+  BorderRadius? borderRadius,
 }) {
   final effectiveBundle = bundle ?? rootBundle;
-  final effectiveAssetName =
-      package != null ? 'packages/$package/$assetName' : assetName;
+  final effectiveAssetName = package != null
+      ? 'packages/$package/$assetName'
+      : assetName;
 
   return SizedBox(
     width: width,
@@ -113,6 +131,7 @@ Widget svgAsset(
           height: height,
           interactive: interactive,
           imageCrossOrigin: imageCrossOrigin,
+          borderRadius: borderRadius,
         );
       },
     ),

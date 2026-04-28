@@ -8,6 +8,7 @@ Widget svgString(
   double? height,
   bool interactive = true,
   CrossOrigin? imageCrossOrigin,
+  BorderRadius? borderRadius,
 }) {
   throw UnsupportedError('DOM SVG rendering is only available on web');
 }
@@ -20,6 +21,7 @@ Widget svgAsset(
   String? package,
   bool interactive = true,
   CrossOrigin? imageCrossOrigin,
+  BorderRadius? borderRadius,
 }) {
   throw UnsupportedError('DOM SVG rendering is only available on web');
 }

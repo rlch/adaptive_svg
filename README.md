@@ -65,6 +65,19 @@ AdaptiveSvg(
 
 When `gestures: false` (default) no gesture widgets are built — the rendered tree is just the bare SVG with zero overhead.
 
+### Rounded corners
+
+```dart
+AdaptiveSvg(
+  svgMarkup,
+  width: 200,
+  height: 120,
+  borderRadius: BorderRadius.circular(16),
+)
+```
+
+On native, the rendered SVG is wrapped in a `ClipRRect`. On web, CSS `border-radius` + `overflow: hidden` is applied to the wrapper `<div>` that hosts the platform view — Flutter's `ClipRRect` doesn't reliably clip `HtmlElementView` content, so the rounding is baked into the DOM container directly.
+
 ### Web-only options
 
 ```dart
