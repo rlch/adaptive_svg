@@ -3,7 +3,6 @@ import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:web/web.dart' as web;
 
 import 'cross_origin.dart';
@@ -28,13 +27,14 @@ Widget svgString(
   String svg, {
   double? width,
   double? height,
-  Key? key,
   bool interactive = true,
-  bool interceptPointer = false,
   CrossOrigin? imageCrossOrigin,
+  BorderRadius? borderRadius,
 }) {
+  // Include `borderRadius` in the view-type key so each radius gets its own
+  // factory — radii are baked into the container's CSS at registration time.
   final viewType =
-      'adaptive-svg-${Object.hash(svg, interactive, imageCrossOrigin)}';
+      'adaptive-svg-${Object.hash(svg, interactive, imageCrossOrigin, borderRadius)}';
 
   if (!_registered.contains(viewType)) {
     _registered.add(viewType);
@@ -46,6 +46,19 @@ Widget svgString(
         ..display = 'flex'
         ..alignItems = 'center'
         ..justifyContent = 'center';
+      if (borderRadius != null) {
+        // Clip the platform view at the DOM layer. Flutter's `ClipRRect`
+        // doesn't reliably clip `HtmlElementView` content (the platform view
+        // sits in a DOM hole above Flutter's canvas), so we apply the
+        // rounding via CSS `border-radius` + `overflow: hidden` directly on
+        // the wrapper `<div>` that hosts the SVG.
+        container.style
+          ..borderTopLeftRadius = '${borderRadius.topLeft.x}px'
+          ..borderTopRightRadius = '${borderRadius.topRight.x}px'
+          ..borderBottomLeftRadius = '${borderRadius.bottomLeft.x}px'
+          ..borderBottomRightRadius = '${borderRadius.bottomRight.x}px'
+          ..overflow = 'hidden';
+      }
       if (!interactive) {
         container.style.pointerEvents = 'none';
       }
@@ -83,27 +96,10 @@ Widget svgString(
     });
   }
 
-  final view = SizedBox(
+  return SizedBox(
     width: width,
     height: height,
-    child: HtmlElementView(viewType: viewType, key: key),
-  );
-
-  if (!interceptPointer) return view;
-
-  // On Flutter web, `HtmlElementView` creates a platform view that sits
-  // above Flutter's canvas in the DOM. Even with `pointer-events: none`
-  // CSS, the platform view "hole" in Flutter's glass pane prevents
-  // `GestureDetector` parents from receiving taps. `PointerInterceptor`
-  // places a transparent Flutter-controlled HTML overlay above the
-  // platform view that forwards pointer events back to Flutter.
-  return Stack(
-    children: [
-      view,
-      Positioned.fill(
-        child: PointerInterceptor(child: const SizedBox.expand()),
-      ),
-    ],
+    child: HtmlElementView(viewType: viewType),
   );
 }
 
@@ -113,14 +109,14 @@ Widget svgAsset(
   double? height,
   AssetBundle? bundle,
   String? package,
-  Key? key,
   bool interactive = true,
-  bool interceptPointer = false,
   CrossOrigin? imageCrossOrigin,
+  BorderRadius? borderRadius,
 }) {
   final effectiveBundle = bundle ?? rootBundle;
-  final effectiveAssetName =
-      package != null ? 'packages/$package/$assetName' : assetName;
+  final effectiveAssetName = package != null
+      ? 'packages/$package/$assetName'
+      : assetName;
 
   return SizedBox(
     width: width,
@@ -133,10 +129,9 @@ Widget svgAsset(
           snapshot.data!,
           width: width,
           height: height,
-          key: key,
           interactive: interactive,
-          interceptPointer: interceptPointer,
           imageCrossOrigin: imageCrossOrigin,
+          borderRadius: borderRadius,
         );
       },
     ),

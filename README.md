@@ -47,6 +47,37 @@ AdaptiveSvg.asset('assets/icon.svg', width: 24, height: 24)
 
 On web, both render inline `<svg>` elements in the DOM. On iOS, Android, macOS, Windows, and Linux, they delegate to `SvgPicture.string` / `SvgPicture.asset` from `flutter_svg`.
 
+### Gesture handling
+
+On web, the SVG is rendered inside an `HtmlElementView`. Platform views punch a hole in Flutter's glass pane, so ancestor `GestureDetector` / `InkWell` widgets do **not** receive taps on the SVG region.
+
+Set `gestures: true` and pass the callbacks you need — the widget stacks a `PointerInterceptor` + `GestureDetector` overlay on web (and just wraps with `GestureDetector` on native):
+
+```dart
+AdaptiveSvg(
+  svgMarkup,
+  gestures: true,
+  onTap: () => print('tapped'),
+  onLongPress: () => print('long press'),
+  onHover: (hovering) => print('hover: $hovering'),
+)
+```
+
+When `gestures: false` (default) no gesture widgets are built — the rendered tree is just the bare SVG with zero overhead.
+
+### Rounded corners
+
+```dart
+AdaptiveSvg(
+  svgMarkup,
+  width: 200,
+  height: 120,
+  borderRadius: BorderRadius.circular(16),
+)
+```
+
+On native, the rendered SVG is wrapped in a `ClipRRect`. On web, CSS `border-radius` + `overflow: hidden` is applied to the wrapper `<div>` that hosts the platform view — Flutter's `ClipRRect` doesn't reliably clip `HtmlElementView` content, so the rounding is baked into the DOM container directly.
+
 ### Web-only options
 
 ```dart
@@ -55,11 +86,6 @@ AdaptiveSvg(svgMarkup, interactive: false)
 
 // Enable CORS for external <image> elements
 AdaptiveSvg(svgMarkup, imageCrossOrigin: CrossOrigin.anonymous)
-
-// Disable pointer interception (enabled by default — forwards pointer events
-// from the platform view back to Flutter's gesture system so parent
-// GestureDetector/InkWell widgets receive taps)
-AdaptiveSvg(svgMarkup, interceptPointer: false)
 ```
 
 ## Example

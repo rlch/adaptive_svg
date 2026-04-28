@@ -1,18 +1,48 @@
+## 0.5.0
+
+### New: `borderRadius` parameter
+
+- `borderRadius` — rounds the corners of the rendered SVG.
+- On web, applied as CSS `border-radius` + `overflow: hidden` on the
+  wrapper `<div>` that hosts the platform view. Flutter's `ClipRRect`
+  doesn't reliably clip `HtmlElementView` content, so the rounding is
+  baked into the DOM container directly.
+- On native, falls back to wrapping the rendered widget in a
+  `ClipRRect`.
+- Available on both `AdaptiveSvg(...)` and `AdaptiveSvg.asset(...)`.
+
+## 0.4.0
+
+### New: built-in gesture handling
+
+- `gestures` (default `false`) — when `true`, wires up gesture handling that
+  works the same on web and native. On web, the widget stacks a
+  `PointerInterceptor` + `GestureDetector` above the platform view so
+  pointer events route back into Flutter's gesture system; on native it
+  just wraps the SVG with a `GestureDetector`. When `false`, no gesture
+  widgets are built at all.
+- New callbacks (only fire when `gestures: true`): `onTap`, `onTapDown`,
+  `onLongPress`, `onSecondaryTap`, `onHover`.
+- New `mouseCursor` parameter — defaults to `SystemMouseCursors.click` when
+  `onTap` is provided, otherwise `MouseCursor.defer`.
+
+### Breaking: `interceptPointer` removed
+
+- The previous `interceptPointer` parameter overlaid an empty
+  `PointerInterceptor` that captured pointer events without forwarding them
+  anywhere — it blocked the platform-view "hole" but had no gesture handler
+  inside, so ancestor `GestureDetector` / `InkWell` widgets still never
+  received taps. The new `gestures: true` API replaces it.
+- Migration: replace `AdaptiveSvg(svg, interceptPointer: true)` with
+  `AdaptiveSvg(svg, gestures: true, onTap: ...)`.
+
 ## 0.3.0
 
-### New: `interceptPointer` option
+### New: `interceptPointer` option (removed in 0.4.0)
 
-- `interceptPointer` (default `true`) — when `true`, overlays a transparent
-  `PointerInterceptor` on top of the `HtmlElementView`. On Flutter web,
-  platform views sit above Flutter's canvas in the DOM and swallow pointer
-  events even with `pointer-events: none` CSS — the platform view "hole" in
-  Flutter's glass pane prevents parent `GestureDetector` widgets from
-  receiving taps. `interceptPointer` places a Flutter-controlled HTML overlay
-  above the platform view so events route back through Flutter's gesture
-  system.
-
-  Use this when the SVG is a non-interactive thumbnail inside a clickable
-  parent (e.g. `GestureDetector`, `InkWell`). Web-only; ignored on native.
+- Added an `interceptPointer` parameter that overlaid a `PointerInterceptor`
+  on top of the `HtmlElementView`. Removed in 0.4.0 in favor of
+  `gestures: true` — see above.
 
 ### Dependency
 

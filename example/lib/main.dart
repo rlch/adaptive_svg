@@ -2,6 +2,7 @@ import 'package:adaptive_svg/adaptive_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'click_through_test.dart';
 import 'svg_samples.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),
-      home: const ComparisonPage(),
+      home: const ClickThroughTestPage(),
     );
   }
 }
@@ -46,6 +47,17 @@ class _ComparisonPageState extends State<ComparisonPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('AdaptiveSvg vs flutter_svg'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.ads_click),
+            tooltip: 'Click-through test',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const ClickThroughTestPage(),
+              ),
+            ),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
           child: SingleChildScrollView(
@@ -56,8 +68,7 @@ class _ComparisonPageState extends State<ComparisonPage> {
                 _FilterChip(
                   label: 'All',
                   selected: _selectedCategory == null,
-                  onSelected: () =>
-                      setState(() => _selectedCategory = null),
+                  onSelected: () => setState(() => _selectedCategory = null),
                 ),
                 for (final cat in _categories)
                   Padding(
@@ -65,8 +76,7 @@ class _ComparisonPageState extends State<ComparisonPage> {
                     child: _FilterChip(
                       label: cat,
                       selected: _selectedCategory == cat,
-                      onSelected: () =>
-                          setState(() => _selectedCategory = cat),
+                      onSelected: () => setState(() => _selectedCategory = cat),
                     ),
                   ),
               ],
@@ -143,7 +153,9 @@ class _ComparisonCard extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),

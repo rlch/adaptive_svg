@@ -12,6 +12,7 @@ dependencies:
   adaptive_svg:
     path: ../
   flutter_svg: ^2.0.17
+  pointer_interceptor: ^0.10.1
 
 dev_dependencies:
   flutter_test:
